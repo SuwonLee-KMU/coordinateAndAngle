@@ -1,4 +1,4 @@
-clear all; clc;
+clear all; clc; close all
 
 pos = [2,1,1];
 gam = pi/180* 30;
@@ -11,7 +11,9 @@ gld.visualize(1);
 gld.connect(1);
 gld.project(1);
 gld.showbodycoordinate(1);
-gld.showbodyaxis(1);
+% gld.showbodyaxis(1);
+gld.showlateralaccel(1);
+gld.showground(1,'green',0.3,[3,3]);
 hold off;
 % return;
 
@@ -27,4 +29,4 @@ crv.draw(1,gld.position,1,...
 hold off;
 
 set(gca,'visible','off')
-% export_fig 'asdf.png' -m5 -dpng -transparent
+export_fig 'asdf.png' -m5 -dpng -transparent

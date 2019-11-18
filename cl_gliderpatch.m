@@ -22,7 +22,7 @@ classdef cl_gliderpatch < handle
             obj.heading   = chi;
         end
     end
-    methods 
+    methods % User can use those methods
         function [fig,ax] = visualize(obj,fignum)
             fig = figure(fignum);
             V0 = obj.getVertex;
@@ -96,7 +96,44 @@ classdef cl_gliderpatch < handle
             ax(2) = quiver3(x,y,z,-uy,-vy,wy,axisopt{:});
             ax(3) = quiver3(x,y,z,uz,vz,wz,axisopt{:});
         end
-        function [fig,ax] = 
+        function [fig,ax] = showground(obj,fignum,facecolor,facealpha,xylength)
+            fig = figure(fignum);
+            switch nargin
+            case 1
+                error('figure number is necessary');
+            case 2
+                facecolor = 'green';
+                facealpha = 0.5;
+                xylength = [1,1];
+            case 3
+                facecolor = 'green';
+                xylength = [1,1];
+            case 4
+                xylength = [1,1];
+            otherwise
+            end
+            V = [0,0; xylength(1),0; 0,xylength(2); xylength(1),xylength(2)];
+            F = [1,2,4,3];
+            ax = patch('faces',F,'vertices',V,'facecolor',facecolor,'facealpha',facealpha,'linestyle','none');
+        end
+        function [fig,ax] = showlateralaccel(obj,fignum)
+            fig = figure(fignum);
+            x = obj.position(1); y = obj.position(2); z = obj.position(3);
+            len = 1;
+            ux = len*cos(obj.pathAngle)*cos(obj.heading);
+            vx = len*cos(obj.pathAngle)*sin(obj.heading);
+            wx = len*sin(obj.pathAngle);
+            uy = -len*sin(obj.heading);
+            vy = len*cos(obj.heading);
+            wy = 0;
+            uz = len*sin(obj.pathAngle)*cos(obj.pathAngle);
+            vz = len*sin(obj.pathAngle)*sin(obj.pathAngle);
+            wz = -len*cos(obj.pathAngle);
+            axisopt = {'linewidth',1.5,'color','b','autoscale','off','maxheadsize',.5};
+            % ax(1) = quiver3(x,y,z,ux,vx,wx,axisopt{:});
+            ax(2) = quiver3(x,y,z,-uy,-vy,wy,axisopt{:});
+            ax(3) = quiver3(x,y,z,-uz,-vz,-wz,axisopt{:});
+        end
     end
     methods 
       function V = shape(obj)
